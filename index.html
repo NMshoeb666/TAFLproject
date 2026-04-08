@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pumping Lemma Interactive Tool</title>
+    <meta name="description" content="An interactive educational tool to visualize and understand the Pumping Lemma for Regular Languages.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2" fill="#3b82f6" />
+                        <polyline points="2 12 12 17 22 12" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="2 17 12 22 22 17" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="title-container">
+                    <h1>Pumping Lemma Visualizer</h1>
+                    <p>THEORY OF COMPUTATION</p>
+                </div>
+            </div>
+            <div class="header-right" style="display: flex; gap: 0.5rem;">
+                <button id="toggle-theory-btn" class="theory-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <span id="toggle-theory-text">Theory Reference</span>
+                </button>
+                <button id="theme-toggle-btn" class="theory-btn" style="padding: 0.5rem;" title="Toggle Light/Dark Mode">
+                    <svg id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <nav class="stepper-container">
+            <div class="stepper">
+                <div class="step active" id="step-1-indicator">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Setup</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step inactive" id="step-2-indicator">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Decomposition</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step inactive" id="step-3-indicator">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Pumping</div>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <section id="theory-panel" class="glass-card theory-layout">
+                <div class="theory-main">
+                    <h2 class="theory-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--x-color);">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        The Pumping Lemma for Regular Languages
+                    </h2>
+                    <p>If a language <strong>L</strong> is regular, then there exists a number <strong>p</strong> (the pumping length) such that any string <strong>s ∈ L</strong> with <strong>|s| ≥ p</strong> can be split into three parts, <strong>s = xyz</strong>, satisfying:</p>
+                    <ul>
+                        <li><strong>|y| > 0</strong> (y is not empty)</li>
+                        <li><strong>|xy| ≤ p</strong> (the first two parts are within the pumping length)</li>
+                        <li>For all <strong>i ≥ 0</strong>, the string <strong>xyⁱz ∈ L</strong></li>
+                    </ul>
+                </div>
+                <div class="theory-sidebar">
+                    <h3>PROOF BY CONTRADICTION</h3>
+                    <p>To prove a language is <strong>not regular</strong>:</p>
+                    <ol>
+                        <li>Assume the language is regular.</li>
+                        <li>Show that for any choice of p, we can find a string s that cannot be "pumped" without leaving the language.</li>
+                        <li>This contradiction proves the initial assumption was false.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="setup-panel" class="glass-card">
+                <h2>Step 1: Setup</h2>
+                <div class="input-group">
+                    <label for="language-select">Target Language (L)</label>
+                    <select id="language-select">
+                        <optgroup label="Non-Regular (The Pumping Lemma fails)">
+                            <option value="anbn">aⁿbⁿ</option>
+                            <option value="wwr">wwᴿ (Even Palindromes)</option>
+                            <option value="prime">aᵖ (p is prime)</option>
+                        </optgroup>
+                        <optgroup label="Regular (The Pumping Lemma holds)">
+                            <option value="astar_bstar">a*b*</option>
+                            <option value="even_a">Even number of "a"s</option>
+                            <option value="ab_star">(ab)*</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="p-value">Pumping Length (p)</label>
+                    <input type="number" id="p-value" min="1" max="10" value="4">
+                </div>
+
+                <div class="input-group">
+                    <label for="s-value">String (s) ∈ L where |s| ≥ p</label>
+                    <div class="string-input-container">
+                        <input type="text" id="s-value" spellcheck="false" autocomplete="false">
+                        <button id="auto-generate">Auto-Generate</button>
+                    </div>
+                    <p id="s-validation" class="validation-msg"></p>
+                    <div class="panel-actions">
+                        <button id="reset-app" class="action-btn outline-btn" title="Reset App">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                            Reset
+                        </button>
+                        <button id="confirm-setup" class="action-btn proceed-btn disabled" disabled title="Next Step">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="decomposition-panel" class="glass-card disabled">
+                <h2>Step 2: Decomposition (xyz)</h2>
+                <p class="instruction">Split <i>s</i> into <i>x</i>, <i>y</i>, and <i>z</i> such that |xy| ≤ p and |y| > 0.</p>
+                
+                <div id="string-visualizer">
+                    <!-- Dynamic segments will be injected here -->
+                </div>
+
+                <div class="slider-controls">
+                    <div class="slider-group">
+                        <label>End of x (length: <span id="x-len">0</span>)</label>
+                        <input type="range" id="x-slider" step="1" value="0">
+                    </div>
+                    <div class="slider-group">
+                        <label>End of y (length: <span id="y-len">1</span>)</label>
+                        <input type="range" id="y-slider" step="1" value="1">
+                    </div>
+                </div>
+
+                <div class="segments-display">
+                    <div class="segment">x: <span id="display-x" class="segment-x"></span></div>
+                    <div class="segment">y: <span id="display-y" class="segment-y"></span></div>
+                    <div class="segment">z: <span id="display-z" class="segment-z"></span></div>
+                </div>
+                <div class="panel-actions right">
+                    <button id="confirm-decomposition" class="action-btn proceed-btn" title="Next Step">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </section>
+
+            <section id="pumping-panel" class="glass-card disabled">
+                <h2>Step 3: Pumping</h2>
+                <p class="instruction">Choose index <i>i</i> to generate <i>xyⁱz</i>.</p>
+                
+                <div class="input-group">
+                    <label for="i-value">Pumping Index (i): <span id="i-display">1</span></label>
+                    <input type="range" id="i-value" min="0" max="10" value="1">
+                </div>
+
+                <div id="result-visualizer" class="glass-card inner">
+                    <!-- Injected result -->
+                </div>
+
+                <div id="membership-result" class="status-indicator">
+                    <!-- Success/Failure indicator -->
+                </div>
+            </section>
+
+            <div style="grid-column: span 3; text-align: center; margin-top: 1rem;">
+                <button id="toggle-analysis-btn" class="action-btn outline-btn" style="padding: 0.75rem 1.5rem; background: var(--input-bg);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem; color: var(--x-color);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    <span id="toggle-analysis-text">Analysis</span>
+                </button>
+            </div>
+            
+            <section id="explanation-panel" class="glass-card theory-layout">
+                <div class="theory-main">
+                    <h2>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        Analysis
+                    </h2>
+                    <div id="explanation-text">
+                        Select a language and a string to begin the analysis.
+                    </div>
+                </div>
+                <div class="theory-sidebar">
+                    <h3>CURRENT STATE</h3>
+                    <p id="analysis-sidebar-text" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                        Awaiting user input for decomposition and pumping.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>Designed for educational purposes &bull; Built with &hearts; for Theory of Computation</p>
+        </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
